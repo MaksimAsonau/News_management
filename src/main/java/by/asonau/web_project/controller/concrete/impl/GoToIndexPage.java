@@ -17,9 +17,13 @@ import jakarta.servlet.http.HttpServletResponse;
 public class GoToIndexPage implements Command{
 
 	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException {
+	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Auth auth = (Auth) request.getSession(false).getAttribute("auth");
+        // Проверяем существование сессии
+        Auth auth = null;
+        if (request.getSession(false) != null) {
+            auth = (Auth) request.getSession(false).getAttribute("auth");
+        }
 
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         INewsService newsService = serviceProvider.getNewsService();

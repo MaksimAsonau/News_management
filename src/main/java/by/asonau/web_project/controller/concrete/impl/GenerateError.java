@@ -7,19 +7,20 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public class Logout implements Command {
+public class GenerateError implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            if (request.getSession(false) != null) {
-                request.getSession().invalidate();
-            }
-            response.sendRedirect("Controller?command=go_to_index_page");
+            // Симуляция ошибки
+            throw new RuntimeException("Это тестовая ошибка для проверки error.jsp");
         } catch (Exception e) {
-            // Логирование ошибки
+            // Логирование ошибки (опционально)
             e.printStackTrace();
-            request.setAttribute("errorMessage", "Произошла ошибка при выходе из профиля.");
+            // Передача сообщения об ошибке
+            request.setAttribute("errorMessage", e.getMessage());
+
+            // Перенаправление на страницу error.jsp
             request.getRequestDispatcher("WEB-INF/jsp/error.jsp").forward(request, response);
         }
     }

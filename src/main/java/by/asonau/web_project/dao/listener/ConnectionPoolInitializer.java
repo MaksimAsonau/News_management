@@ -1,7 +1,7 @@
-package by.asonau.web_project.listener;
+package by.asonau.web_project.dao.listener;
 
-import by.asonau.web_project.dbmanager.ConnectionPool;
-import by.asonau.web_project.dbmanager.ConnectionPoolException;
+import by.asonau.web_project.dao.dbmanager.ConnectionPool;
+import by.asonau.web_project.dao.dbmanager.ConnectionPoolException;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;

@@ -16,9 +16,6 @@ public class DoAuth implements Command {
 
     private final IUserService userService = ServiceProvider.getInstance().getUserService();
 
-    public DoAuth() throws ServiceException {
-    }
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

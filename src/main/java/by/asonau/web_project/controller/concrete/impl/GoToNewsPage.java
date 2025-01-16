@@ -16,7 +16,7 @@ import java.io.IOException;
 public class GoToNewsPage implements Command {
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, ServiceException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         // Проверяем, есть ли объект auth в сессии
         Auth auth = (Auth) request.getSession().getAttribute("auth");
@@ -33,7 +33,18 @@ public class GoToNewsPage implements Command {
         INewsService newsService = serviceProvider.getNewsService();
 
         String newsId = request.getParameter("newsId");
-        News news = newsService.getNewsFromDatabaseById(Integer.parseInt(newsId));
+
+//        News news = newsService.getNewsFromDatabaseById(Integer.parseInt(newsId));
+
+        News news = null;
+
+        try {
+            news = newsService.getNewsFromDatabaseById(Integer.parseInt(newsId));
+        } catch (Exception e) {
+            // Логирование ошибки (при необходимости)
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Ошибка при загрузке новости. Попробуйте позже.");
+        }
 
         if (news != null) {
             request.setAttribute("news", news);

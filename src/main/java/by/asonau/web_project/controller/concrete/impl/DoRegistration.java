@@ -12,11 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class DoRegistration implements Command {
 
-	private final IUserService logicForRegistration = ServiceProvider.getInstance().getUserService();
-//	private final ICheckService check = serviceFactory.getCheckService();
+	private final IUserService userService = ServiceProvider.getInstance().getUserService();
 
-	public DoRegistration() throws ServiceException {
-	}
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,18 +1,16 @@
 package by.asonau.web_project.dao.impl;
 
 import by.asonau.web_project.bean.News;
-import by.asonau.web_project.bean.User;
 import by.asonau.web_project.dao.DAOException;
 import by.asonau.web_project.dao.INewsDAO;
-import by.asonau.web_project.dbmanager.ConnectionPool;
-import by.asonau.web_project.dbmanager.ConnectionPoolException;
+import by.asonau.web_project.dao.dbmanager.ConnectionPool;
+import by.asonau.web_project.dao.dbmanager.ConnectionPoolException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

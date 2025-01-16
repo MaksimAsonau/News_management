@@ -64,7 +64,7 @@ public class Session implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getName() + "{" +
+        return getClass().getSimpleName() + "{" +
                 "sessionId=" + sessionId +
                 ", login='" + login + '\'' +
                 ", dateCreated='" + dateCreated + '\'' +

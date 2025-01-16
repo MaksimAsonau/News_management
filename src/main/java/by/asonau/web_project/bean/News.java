@@ -113,7 +113,7 @@ public class News implements Serializable {
 
 	@Override
 	public String toString() {
-		return getClass().getName() + "{" +
+		return getClass().getSimpleName() + "{" +
 				"newsId=" + newsId +
 				", title='" + title + '\'' +
 				", brief='" + brief + '\'' +

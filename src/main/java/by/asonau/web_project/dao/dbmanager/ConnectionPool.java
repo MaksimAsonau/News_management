@@ -1,8 +1,4 @@
-package by.asonau.web_project.dbmanager;
-
-import by.asonau.web_project.dbmanager.ConnectionPoolException;
-import by.asonau.web_project.dbmanager.DBParameter;
-import by.asonau.web_project.dbmanager.DBResourceManager;
+package by.asonau.web_project.dao.dbmanager;
 
 import java.sql.*;
 import java.util.Locale;

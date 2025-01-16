@@ -40,7 +40,7 @@ public class NewsCategory {
 
     @Override
     public String toString() {
-        return getClass().getName() + "{" +
+        return getClass().getSimpleName() + "{" +
                 "newsCategoryId=" + newsCategoryId +
                 ", name='" + name + '\'' +
                 '}';

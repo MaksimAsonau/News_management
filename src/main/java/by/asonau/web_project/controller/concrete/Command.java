@@ -9,5 +9,5 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface Command {
 	
-	void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, ServiceException, IOException;
+	void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException,  IOException;
 }

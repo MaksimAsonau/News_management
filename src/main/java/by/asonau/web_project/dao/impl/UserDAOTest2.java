@@ -1,11 +1,8 @@
 package by.asonau.web_project.dao.impl;
 
-import by.asonau.web_project.bean.News;
 import by.asonau.web_project.bean.User;
-import by.asonau.web_project.dbmanager.ConnectionPool;
-import by.asonau.web_project.dbmanager.ConnectionPoolException;
-
-import java.util.List;
+import by.asonau.web_project.dao.dbmanager.ConnectionPool;
+import by.asonau.web_project.dao.dbmanager.ConnectionPoolException;
 //import by.asonau.web_project.dao.IDatabaseConnectionDAO;
 
 public class UserDAOTest2 {

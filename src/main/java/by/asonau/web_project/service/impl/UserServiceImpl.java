@@ -11,17 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class UserServiceImpl implements IUserService {
 
-    private final DAOProvider daoProvider;
-    private final IUserDAO userDAO;
-
-    public UserServiceImpl() throws ServiceException {
-        try {
-            daoProvider = DAOProvider.getInstance();
-            userDAO = daoProvider.getUserDAO();
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-    }
+    private final IUserDAO userDAO = DAOProvider.getInstance().getUserDAO();
 
     // Возвращает юзера для личного кабинета
     @Override
@@ -64,14 +54,4 @@ public class UserServiceImpl implements IUserService {
     public int getRoleId(UserRole role) throws ServiceException {
         return 0;
     }
-
-//        @Override
-//    public int checkExclusiveUserReg(String name, String email, String password, String regKey, UserRole userRole) throws ServiceException {
-//        return 0;
-//    }
-//
-//        @Override
-//    public UserRole specifyRoleKeyBelongsTo(HttpServletRequest request, String inputRegKey) throws ServiceException {
-//        return null;
-//    }
 }

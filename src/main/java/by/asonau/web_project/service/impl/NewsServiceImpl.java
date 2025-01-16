@@ -16,19 +16,31 @@ public class NewsServiceImpl implements INewsService {
     private List<News> topNewsList = new ArrayList<>();
     private List<News> breakingNewsList = new ArrayList<>();
 
-    private final DAOProvider daoProvider;
-    private final INewsDAO newsTool;
+    private final INewsDAO newsDAO = DAOProvider.getInstance().getNewsDAO();
 
-    public NewsServiceImpl() throws ServiceException {
+    public NewsServiceImpl () {
+    }
+
+    @Override
+    public News getNewsFromDatabaseById(int newsId) throws ServiceException {
         try {
-            daoProvider = DAOProvider.getInstance();
-            newsTool = daoProvider.getNewsDAO();
+            return newsDAO.getNewsById(newsId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
-//
+    @Override
+    public List<News> getNewsList() throws ServiceException {
+        try {
+            return newsDAO.getAllNews();
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+
+    //
 //    @Override
 //    public int addNewsToDatabase(News news) throws ServiceException {
 //        return 0;
@@ -39,23 +51,6 @@ public class NewsServiceImpl implements INewsService {
 //        return false;
 //    }
 //
-    @Override
-    public News getNewsFromDatabaseById(int newsId) throws ServiceException {
-        try {
-            return newsTool.getNewsById(newsId);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public List<News> getNewsList() throws ServiceException {
-        try {
-            return newsTool.getAllNews();
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-    }
 //
 //    @Override
 //    public List<News> getAuthorNewsList(int authorId) throws ServiceException {
@@ -80,5 +75,17 @@ public class NewsServiceImpl implements INewsService {
 //    @Override
 //    public boolean addCoauthorToNews(int coauthorId, int newsId) throws ServiceException {
 //        return false;
+//    }
+
+    //    private final DAOProvider daoProvider;
+//    private final INewsDAO newsDAO;
+
+    //    public NewsServiceImpl() throws ServiceException {
+//        try {
+//            daoProvider = DAOProvider.getInstance();
+//            newsDAO = daoProvider.getNewsDAO();
+//        } catch (DAOException e) {
+//            throw new ServiceException(e);
+//        }
 //    }
 }

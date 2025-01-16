@@ -47,7 +47,7 @@ public class Auth {
 
     @Override
     public String toString() {
-        return getClass().getName() + "{" +
+        return getClass().getSimpleName() + "{" +
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", role=" + role +

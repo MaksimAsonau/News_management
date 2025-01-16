@@ -4,8 +4,8 @@ import by.asonau.web_project.bean.User;
 import by.asonau.web_project.bean.UserRole;
 import by.asonau.web_project.dao.DAOException;
 import by.asonau.web_project.dao.IUserDAO;
-import by.asonau.web_project.dbmanager.ConnectionPool;
-import by.asonau.web_project.dbmanager.ConnectionPoolException;
+import by.asonau.web_project.dao.dbmanager.ConnectionPool;
+import by.asonau.web_project.dao.dbmanager.ConnectionPoolException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

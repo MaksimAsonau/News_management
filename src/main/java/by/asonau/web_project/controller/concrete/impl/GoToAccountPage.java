@@ -5,6 +5,7 @@ import by.asonau.web_project.controller.concrete.Command;
 import by.asonau.web_project.service.IUserService;
 import by.asonau.web_project.service.ServiceException;
 import by.asonau.web_project.service.ServiceProvider;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,17 +16,21 @@ public class GoToAccountPage implements Command {
 
     private final IUserService userService = ServiceProvider.getInstance().getUserService();
 
-    public GoToAccountPage() throws ServiceException {
-    }
-
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, ServiceException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int userId = (int) request.getSession().getAttribute("id"); // ID пользователя из сессии
+
         try {
             User user = userService.getUserInfoById(userId); // Получаем данные из базы
-            request.getSession().setAttribute("tempUser", user); // Временно кладем пользователя в сессию
-            response.sendRedirect("Controller?command=go_to_profile_page"); // Редирект
+            if (user != null) {
+                request.setAttribute("user", user); // Передаем пользователя в JSP
+            }
+            // Форвард на страницу личного кабинета
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/account-page.jsp");
+            dispatcher.forward(request, response);
+
         } catch (ServiceException e) {
+            // В случае ошибки перенаправляем на страницу ошибки
             response.sendRedirect("Controller?command=go_to_error_page");
         }
     }

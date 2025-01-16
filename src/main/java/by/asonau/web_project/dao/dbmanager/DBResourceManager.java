@@ -1,4 +1,4 @@
-package by.asonau.web_project.dbmanager;
+package by.asonau.web_project.dao.dbmanager;
 
 import java.util.ResourceBundle;
 

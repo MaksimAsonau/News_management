@@ -160,7 +160,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getName() + "{" +
+        return getClass().getSimpleName() + "{" +
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", userRole=" + userRole +
