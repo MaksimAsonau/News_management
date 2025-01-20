@@ -44,13 +44,38 @@
             margin: 0;
         }
 
+        /* Полоска с кнопками */
+        .nav-bar {
+            background-color: var(--secondary-color);
+            display: flex;
+            justify-content: flex-start;
+            padding: 10px 20px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .nav-bar button {
+            padding: 7px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-bar button:hover {
+            background-color: #1b2838;
+        }
+
         .container {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px 0;
-            transform: translateY(-50px);
+            margin-top: -50px; /* Убираем transform */
         }
 
         .auth-container {
@@ -119,18 +144,31 @@
     <h1>Портал управления новостями</h1>
 </header>
 
+<!-- Полоска с кнопками -->
+<div class="nav-bar">
+    <!-- Кнопка "На главную" -->
+    <form action="Controller" method="Get" style="margin: 0;">
+        <button type="submit" name="command" value="GO_TO_INDEX_PAGE">На главную</button>
+    </form>
+</div>
+
 <div class="container">
     <div class="auth-container">
         <h2>Регистрация</h2>
         <div class="error-message" id="error-message">
-            <c:if test="${not empty param.registerError}">
-                <c:out value="${param.registerError}" />
+            <c:if test="${not empty requestScope.registerError}">
+                <c:out value="${requestScope.registerError}" />
             </c:if>
         </div>
+<%--        <div class="error-message" id="error-message">--%>
+<%--            <c:if test="${not empty param.registerError}">--%>
+<%--                <c:out value="${param.registerError}" />--%>
+<%--            </c:if>--%>
+<%--        </div>--%>
         <form action="Controller" method="post">
             <input type="text" name="login" placeholder="Логин" required>
             <input type="password" name="password" placeholder="Пароль" required>
-<%--            <input type="password" name="confirmPassword" placeholder="Повторите пароль" required>--%>
+            <input type="password" name="confirmPassword" placeholder="Повторите пароль" required>
             <input type="text" name="name" placeholder="Имя" required>
             <input type="text" name="surname" placeholder="Фамилия" required>
             <input type="email" name="email" placeholder="Почта" required>
@@ -138,19 +176,18 @@
                 <option value="">Выберите роль</option>
                 <option value="admin">Админ</option>
                 <option value="author">Автор</option>
-                <option value="reader">Пользователь</option>
+                <option value="user">Пользователь</option>
             </select>
             <input type="date" name="birthDate" placeholder="Дата рождения" required>
+            <input type="text" name="address" placeholder="Адрес" required>
             <button class="register-btn" type="submit" name="command" value="do_registration">Зарегистрироваться</button>
         </form>
     </div>
 </div>
 
 <footer>
-    <p>&copy; 2024 Портал управления новостями</p>
+    <p>&copy; 2025 Портал управления новостями</p>
 </footer>
 
 </body>
 </html>
-
-

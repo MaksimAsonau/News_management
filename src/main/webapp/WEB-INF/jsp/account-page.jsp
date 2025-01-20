@@ -425,7 +425,8 @@
           </tr>
           <tr>
             <td>Роль:</td>
-            <td><c:out value="${user.roleName}" /></td>
+<%--            <td><c:out value="${user.roleName}" /></td>--%>
+            <td><c:out value="${user.userRole}" /></td>
           </tr>
           <tr>
             <td>Дата рождения:</td>

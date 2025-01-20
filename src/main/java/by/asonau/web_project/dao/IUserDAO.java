@@ -8,8 +8,10 @@ public interface IUserDAO {
 
     boolean doesLoginExistInDB(String login) throws DAOException;
 
+    boolean doesEmailExistInDB(String email) throws DAOException;
+
     User getUserInfoById(int id);
 
-    int registerUserInDatabase(String name, String login, String password)  throws DAOException;
+    int registerUserInDatabase(User user)  throws DAOException;
 
 }

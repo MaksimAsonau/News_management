@@ -34,8 +34,6 @@ public class GoToNewsPage implements Command {
 
         String newsId = request.getParameter("newsId");
 
-//        News news = newsService.getNewsFromDatabaseById(Integer.parseInt(newsId));
-
         News news = null;
 
         try {

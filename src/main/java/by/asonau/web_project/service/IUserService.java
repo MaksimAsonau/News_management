@@ -10,9 +10,11 @@ public interface IUserService {
 
     User getUserInfoById (int id) throws ServiceException;
 
-    int checkUserReg(String name, String login, String password) throws ServiceException;
+    int checkUserReg(User user) throws ServiceException;
 
-    boolean checkLoginExistsInDB(HttpServletRequest request, String login) throws ServiceException;
+    boolean checkLoginExistsInDB(String login) throws ServiceException;
+
+    boolean checkEmailExistsInDB(String login) throws ServiceException;
 
     int getRoleId (UserRole role) throws ServiceException;
 }

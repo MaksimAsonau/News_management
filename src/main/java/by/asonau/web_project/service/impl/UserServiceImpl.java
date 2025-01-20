@@ -7,7 +7,6 @@ import by.asonau.web_project.dao.DAOProvider;
 import by.asonau.web_project.dao.IUserDAO;
 import by.asonau.web_project.service.IUserService;
 import by.asonau.web_project.service.ServiceException;
-import jakarta.servlet.http.HttpServletRequest;
 
 public class UserServiceImpl implements IUserService {
 
@@ -19,7 +18,7 @@ public class UserServiceImpl implements IUserService {
         try {
             return userDAO.getUserInfoById(id); // Может вернуть null
         } catch (DAOException e) {
-            throw new ServiceException("Ошибка при авторизации пользователя", e);
+            throw new ServiceException("Ошибка на уровне DAO при получении информации о пользователе", e);
         }
     }
 
@@ -28,25 +27,34 @@ public class UserServiceImpl implements IUserService {
         try {
             return userDAO.logIn(login, password); // Может вернуть null
         } catch (DAOException e) {
-            throw new ServiceException("Ошибка при авторизации пользователя", e);
+            throw new ServiceException("Ошибка на уровне DAO при авторизации пользователя", e);
         }
     }
 
     @Override
-    public int checkUserReg(String name, String email, String password) throws ServiceException {
+    public int checkUserReg(User user) throws ServiceException {
         try {
-            return userDAO.registerUserInDatabase(name, email, password);
+            return userDAO.registerUserInDatabase(user);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Ошибка на уровне DAO при регистрации пользователя.", e);
         }
     }
 
     @Override
-    public boolean checkLoginExistsInDB(HttpServletRequest request, String login) throws ServiceException {
+    public boolean checkLoginExistsInDB(String login) throws ServiceException {
         try {
             return userDAO.doesLoginExistInDB(login);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Ошибка на уровне DAO при проверке уникальности логина.", e);
+        }
+    }
+
+    @Override
+    public boolean checkEmailExistsInDB(String login) throws ServiceException {
+        try {
+            return userDAO.doesEmailExistInDB(login);
+        } catch (DAOException e) {
+            throw new ServiceException("Ошибка на уровне DAO при проверке уникальности почты.", e);
         }
     }
 

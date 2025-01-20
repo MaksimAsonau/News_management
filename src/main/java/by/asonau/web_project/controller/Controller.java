@@ -22,7 +22,6 @@ public class Controller extends HttpServlet{
 		doRequest(request, response);
 	}
 
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doRequest(request, response);
 	}
@@ -33,37 +32,6 @@ public class Controller extends HttpServlet{
 		Command command = provider.takeCommand(userCommand);
 		command.execute(request, response);
 	}
-
-
-//	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-//			throws ServletException, IOException {
-//
-//		try {
-//			doRequest(request, response);
-//		} catch (ServiceException e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
-//
-//	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-//			throws ServletException, IOException {
-//
-//		try {
-//			doRequest(request, response);
-//		} catch (ServiceException e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
-//
-//	private void doRequest(HttpServletRequest request, HttpServletResponse response)
-//			throws ServletException, IOException, ServiceException {
-//		String userCommand = request.getParameter("command");
-//
-//		System.out.println("Received command: " + userCommand);
-//
-//		Command command = provider.takeCommand(userCommand);
-//		command.execute(request, response);
-//	}
 }
 
 

@@ -9,37 +9,37 @@ public class User implements Serializable {
 
     private int id;
     private String login;
+    private String password;
     private UserRole userRole;
     private String name;
     private String surname;
     private String email;
-    private String roleName;
     private String imageUrl;
     private LocalDate birthdayDate;
     private LocalDate registrationDate;
     private String address;
 
-    public User(String login, UserRole userRole, String name, String surname, String email, String roleName, String imageUrl, LocalDate birthdayDate, LocalDate registrationDate, String address) {
+    public User(String login, String password, UserRole userRole, String name, String surname, String email, LocalDate birthdayDate, LocalDate registrationDate, String address) {
         this.login = login;
+        this.password = password;
         this.userRole = userRole;
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.roleName = roleName;
-        this.imageUrl = imageUrl;
         this.birthdayDate = birthdayDate;
         this.registrationDate = registrationDate;
         this.address = address;
     }
 
-    public User(int id, String login, UserRole userRole, String name, String surname, String email, String roleName, String imageUrl, LocalDate birthdayDate, LocalDate registrationDate, String address) {
+
+    public User(int id, String login, UserRole userRole, String name, String surname, String email,
+                String imageUrl, LocalDate birthdayDate, LocalDate registrationDate, String address) {
         this.id = id;
         this.login = login;
         this.userRole = userRole;
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.roleName = roleName;
         this.imageUrl = imageUrl;
         this.birthdayDate = birthdayDate;
         this.registrationDate = registrationDate;
@@ -50,11 +50,6 @@ public class User implements Serializable {
         this.id = id;
         this.login = login;
         this.userRole = userRole;
-    }
-
-    public User(int id, String login) {
-        this.id = id;
-        this.login = login;
     }
 
     public int getId() {
@@ -71,6 +66,14 @@ public class User implements Serializable {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public UserRole getUserRole() {
@@ -105,14 +108,6 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
@@ -145,17 +140,22 @@ public class User implements Serializable {
         this.address = address;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(login, user.login) && userRole == user.userRole && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email) && Objects.equals(roleName, user.roleName) && Objects.equals(imageUrl, user.imageUrl) && Objects.equals(birthdayDate, user.birthdayDate) && Objects.equals(registrationDate, user.registrationDate) && Objects.equals(address, user.address);
+        return id == user.id && Objects.equals(login, user.login) && Objects.equals(password, user.password) &&
+                userRole == user.userRole && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) &&
+                Objects.equals(email, user.email) && Objects.equals(imageUrl, user.imageUrl) &&
+                Objects.equals(birthdayDate, user.birthdayDate) && Objects.equals(registrationDate, user.registrationDate) &&
+                Objects.equals(address, user.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, userRole, name, surname, email, roleName, imageUrl, birthdayDate, registrationDate, address);
+        return Objects.hash(id, login, password, userRole, name, surname, email, imageUrl, birthdayDate, registrationDate, address);
     }
 
     @Override
@@ -163,11 +163,11 @@ public class User implements Serializable {
         return getClass().getSimpleName() + "{" +
                 "id=" + id +
                 ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
                 ", userRole=" + userRole +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
-                ", roleName='" + roleName + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", birthdayDate=" + birthdayDate +
                 ", registrationDate=" + registrationDate +

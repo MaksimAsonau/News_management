@@ -7,34 +7,23 @@ import by.asonau.web_project.dao.IUserDAO;
 import by.asonau.web_project.dao.dbmanager.ConnectionPool;
 import by.asonau.web_project.dao.dbmanager.ConnectionPoolException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 
 public class UserDAOImpl implements IUserDAO {
 
-    ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-    /**
-     * Метод авторизации
-     *
-     * @param login     передан по цепочке "форма авторизации -> слой сервисов"
-     * @param password  передан по цепочке "форма авторизации -> слой сервисов"
-     * @return
-     * @throws DAOException
-     */
+    private static final String QUERY_LOG_IN = "SELECT u.id, u.login, r.name AS role_name " +
+            "FROM news_management_v20.user u " +
+            "JOIN news_management_v20.role r ON u.role_id = r.id " +
+            "WHERE u.login = ? AND u.password = ?";
+
     @Override
     public User logIn(String login, String password) throws DAOException {
 
-        String query = "SELECT u.id, u.login, r.name AS role_name " +
-                "FROM news_management_v20.user u " +
-                "JOIN news_management_v20.role r ON u.role_id = r.id " +
-                "WHERE u.login = ? AND u.password = ?";
-
         try (Connection connection = connectionPool.takeConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_LOG_IN)) {
             preparedStatement.setString(1, login);
             preparedStatement.setString(2, password);
 
@@ -54,34 +43,53 @@ public class UserDAOImpl implements IUserDAO {
         }
     }
 
+    private static final String QUERY_DOES_LOGIN_EXIST_IN_DB =
+            "SELECT 1 FROM news_management_v20.user WHERE login = ?";
+
     @Override
     public boolean doesLoginExistInDB(String login) throws DAOException {
-        String query = "SELECT 1 FROM news_management_v20.user WHERE login = ?";
         try (Connection connection = connectionPool.takeConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_DOES_LOGIN_EXIST_IN_DB)) {
             preparedStatement.setString(1, login);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return resultSet.next();
+                return resultSet.next(); // Если есть хотя бы одна запись, возвращаем true
             }
         } catch (SQLException | ConnectionPoolException e) {
-            throw new DAOException(e);
+            throw new DAOException("Ошибка при проверке логина в базе данных.", e);
         }
     }
 
+    private static final String QUERY_DOES_EMAIL_EXIST_IN_DB =
+            "SELECT 1 FROM news_management_v20.user WHERE email = ?";
+
+    @Override
+    public boolean doesEmailExistInDB(String email) throws DAOException {
+        try (Connection connection = connectionPool.takeConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_DOES_EMAIL_EXIST_IN_DB)) {
+            preparedStatement.setString(1, email);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return resultSet.next(); // Если есть хотя бы одна запись, возвращаем true
+            }
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new DAOException("Ошибка при проверке почты в базе данных.", e);
+        }
+    }
+
+    private static final String QUERY_GET_USER_INFO_BY_ID =
+            "SELECT u.id, u.login, r.name AS role_name, u.name AS first_name, u.surname, u.email,\n" +
+            "               r.image_path AS role_image, ud.date_birthday, ud.date_registration, ud.address\n" +
+            "        FROM user u\n" +
+            "        JOIN role r ON u.role_id = r.id\n" +
+            "        LEFT JOIN user_details ud ON u.id = ud.user_id\n" +
+            "        WHERE u.id = ?";
+
     @Override
     public User getUserInfoById(int id) {
-        String query = """
-        SELECT u.id, u.login, r.name AS role_name, u.name AS first_name, u.surname, u.email,
-               r.image_path AS role_image, ud.date_birthday, ud.date_registration, ud.address
-        FROM user u
-        JOIN role r ON u.role_id = r.id
-        LEFT JOIN user_details ud ON u.id = ud.user_id
-        WHERE u.id = ?
-    """;
 
         try (Connection connection = connectionPool.takeConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_USER_INFO_BY_ID)) {
 
             // Устанавливаем значение ID
             preparedStatement.setInt(1, id);
@@ -104,7 +112,7 @@ public class UserDAOImpl implements IUserDAO {
                     String address = resultSet.getString("address");
 
                     // Создаем и возвращаем объект User
-                    return new User(userId, login, userRole, name, surname, email, roleName, roleImage,
+                    return new User(userId, login, userRole, name, surname, email, roleImage,
                             birthdayDate, registrationDate, address);
                 } else {
                     // Если пользователь не найден, выбрасываем исключение
@@ -116,8 +124,56 @@ public class UserDAOImpl implements IUserDAO {
         }
     }
 
+    private static final String QUERY_INSERT_USER =
+            "INSERT INTO news_management_v20.user (login, password, name, surname, email, role_id) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String QUERY_INSERT_USER_DETAILS =
+            "INSERT INTO news_management_v20.user_details (user_id, date_birthday, date_registration, address) VALUES (?, ?, ?, ?)";
+
     @Override
-    public int registerUserInDatabase(String name, String login, String password) throws DAOException {
-        return 0;
+    public int registerUserInDatabase(User user) throws DAOException {
+        try (Connection connection = connectionPool.takeConnection()) {
+            connection.setAutoCommit(false); // Начинаем транзакцию
+
+            try (PreparedStatement userStatement = connection.prepareStatement(QUERY_INSERT_USER, Statement.RETURN_GENERATED_KEYS);
+                 PreparedStatement detailsStatement = connection.prepareStatement(QUERY_INSERT_USER_DETAILS)) {
+
+                // Вставка в таблицу user
+                userStatement.setString(1, user.getLogin());
+                userStatement.setString(2, user.getPassword());
+                userStatement.setString(3, user.getName());
+                userStatement.setString(4, user.getSurname());
+                userStatement.setString(5, user.getEmail());
+                userStatement.setInt(6, user.getUserRole().ordinal() + 1); // Преобразуем роль в ID
+
+                userStatement.executeUpdate();
+
+                // Получаем сгенерированный ID пользователя
+                try (ResultSet generatedKeys = userStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int userId = generatedKeys.getInt(1);
+
+                        // Вставка в таблицу user_details
+                        detailsStatement.setInt(1, userId);
+                        detailsStatement.setDate(2, Date.valueOf(user.getBirthdayDate()));
+                        detailsStatement.setDate(3, Date.valueOf(user.getRegistrationDate()));
+                        detailsStatement.setString(4, user.getAddress());
+
+                        detailsStatement.executeUpdate();
+                    } else {
+                        connection.rollback();
+                        throw new DAOException("Не удалось получить ID нового пользователя.");
+                    }
+                }
+
+                connection.commit();
+                return 1; // Регистрация успешна
+
+            } catch (SQLException e) {
+                connection.rollback();
+                throw new DAOException("Ошибка при регистрации пользователя.", e);
+            }
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new DAOException("Ошибка подключения к базе данных.", e);
+        }
     }
 }

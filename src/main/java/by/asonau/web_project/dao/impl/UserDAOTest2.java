@@ -15,10 +15,10 @@ public class UserDAOTest2 {
         NewsDAOImpl newsDAO = new NewsDAOImpl();
         UserDAOImpl userDAO = new UserDAOImpl();
 
-        User user = userDAO.getUserInfoById(1);
-        System.out.println(user);
+        System.out.println(userDAO.doesLoginExistInDB("vasya") && userDAO.doesEmailExistInDB("vasyan@mail.ru"));
 
-
+//        User user = userDAO.getUserInfoById(1);
+//        System.out.println(user);
 
 //        UserDAOImpl check = new UserDAOImpl();
 //        boolean svetikCheck = check.doesLoginExistInDB("svetik");
@@ -49,7 +49,5 @@ public class UserDAOTest2 {
 
 //        News news7 = newsDAO.getNewsById(7);
 //        System.out.println(news7);
-
-
     }
 }
