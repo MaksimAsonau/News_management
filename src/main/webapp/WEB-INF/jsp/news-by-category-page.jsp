@@ -4,7 +4,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Портал управления новостями</title>
+    <title>Новости по категории</title>
     <style>
         /* Базовые стили */
         * {
@@ -36,7 +36,7 @@
             margin: 0;
         }
 
-        /* Основной контент */
+        /* Стили для основного контента */
         main {
             flex: 1;
             padding: 20px;
@@ -58,13 +58,6 @@
             display: flex;
             align-items: center;
             position: relative;
-        }
-
-        .auth-left {
-            margin-right: auto;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .auth-center {
@@ -92,18 +85,6 @@
             font-size: 14px;
         }
 
-        .auth button.add-news {
-            background-color: #28a745; /* Зеленый цвет кнопки "Добавить новость" */
-        }
-
-        .auth button:hover {
-            background-color: #1b2838;
-        }
-
-        .auth button.add-news:hover {
-            background-color: #218838; /* Более темный зеленый при наведении */
-        }
-
         .auth button.category {
             background-color: #6c757d; /* Стандартный цвет кнопок */
         }
@@ -115,11 +96,6 @@
 
         .auth button.category:hover:not(.active) {
             background-color: #5a6268;
-        }
-
-        .auth .warning {
-            color: red;
-            font-size: 15px;
         }
 
         .news-item {
@@ -159,17 +135,14 @@
 </header>
 
 <div class="auth">
-    <!-- Левая часть: кнопка "Добавить новость" -->
-    <div class="auth-left">
-        <c:if test="${not empty sessionScope.role && (sessionScope.role == 'author' || sessionScope.role == 'admin')}">
-            <form action="Controller" method="Get">
-                <button type="submit" name="command" value="GO_TO_ADD_NEWS_PAGE" class="add-news">Добавить новость</button>
-            </form>
-        </c:if>
-    </div>
+    <!-- Кнопка "На главную" -->
+    <form action="Controller" method="Get">
+        <button type="submit" name="command" value="GO_TO_INDEX_PAGE">На главную</button>
+    </form>
+
+    <!-- Центрируем кнопки категорий -->
 
     <div class="auth-center">
-        <!-- Кнопки категорий -->
         <form action="Controller" method="Get">
             <input type="hidden" name="command" value="go_to_news_by_category_page" />
             <button type="submit" name="categoryId" value="1" class="category <c:if test='${param.categoryId == "1"}'>active</c:if>">IT News</button>
@@ -182,8 +155,6 @@
             <input type="hidden" name="command" value="go_to_news_by_category_page" />
             <button type="submit" name="categoryId" value="3" class="category <c:if test='${param.categoryId == "3"}'>active</c:if>">Cars News</button>
         </form>
-
-        <!-- Кнопка "My News" -->
         <c:if test="${not empty sessionScope.role && (sessionScope.role == 'author' || sessionScope.role == 'admin')}">
             <form action="Controller" method="Get">
                 <button type="submit" name="command" value="GO_TO_MY_NEWS_PAGE" class="category <c:if test='${param.command == "GO_TO_MY_NEWS_PAGE"}'>active</c:if>">My News</button>
@@ -191,26 +162,34 @@
         </c:if>
     </div>
 
+
+
+
+<%--    <div class="auth-center">--%>
+<%--        <form action="Controller" method="Get">--%>
+<%--            <input type="hidden" name="command" value="go_to_news_by_category_page" />--%>
+<%--            <button type="submit" name="categoryId" value="1" class="category <c:if test='${param.categoryId == "1"}'>active</c:if>">IT News</button>--%>
+<%--        </form>--%>
+<%--        <form action="Controller" method="Get">--%>
+<%--            <input type="hidden" name="command" value="go_to_news_by_category_page" />--%>
+<%--            <button type="submit" name="categoryId" value="2" class="category <c:if test='${param.categoryId == "2"}'>active</c:if>">Sport News</button>--%>
+<%--        </form>--%>
+<%--        <form action="Controller" method="Get">--%>
+<%--            <input type="hidden" name="command" value="go_to_news_by_category_page" />--%>
+<%--            <button type="submit" name="categoryId" value="3" class="category <c:if test='${param.categoryId == "3"}'>active</c:if>">Cars News</button>--%>
+<%--        </form>--%>
+<%--    </div>--%>
+
+    <!-- Правая часть с приветствием и кнопкой "Личный кабинет" -->
     <div class="auth-right">
         <c:choose>
             <c:when test="${not empty sessionScope.login}">
                 <span>Добро пожаловать, <strong><c:out value="${sessionScope.login}" /></strong>!</span>
-                <form action="Controller" method="Get">
+                <form action="Controller" method="Get" style="display: inline;">
                     <button type="submit" name="command" value="GO_TO_ACCOUNT_PAGE">Личный кабинет</button>
                 </form>
             </c:when>
             <c:otherwise>
-                <!-- Выводим предупреждение, если оно установлено -->
-                <c:if test="${not empty sessionScope.warningMessage}">
-                    <span class="warning"><c:out value="${sessionScope.warningMessage}" /></span>
-                    <!-- Удаляем предупреждение после отображения -->
-                    <c:set var="warningMessage" value="" scope="session" />
-                </c:if>
-
-                <c:if test="${not empty param.successMessage}">
-                    <p style="color: green;"><c:out value="${param.successMessage}" /></p>
-                </c:if>
-
                 <form action="Controller" method="Get">
                     <button type="submit" name="command" value="GO_TO_AUTHENTICATION_PAGE">Войти / Зарегистрироваться</button>
                 </form>
@@ -220,16 +199,21 @@
 </div>
 
 <main>
-    <c:forEach var="news" items="${allNews}">
-        <article class="news-item">
-            <img src="<c:out value='${news.imageUrl}' />" alt="News Image" />
-            <div>
-                <h2><c:out value="${news.title}" /></h2>
-                <p><c:out value="${news.brief}" /></p>
-                <a href="Controller?command=go_to_news_page&newsId=<c:out value='${news.newsId}' />">Читать далее</a>
-            </div>
-        </article>
-    </c:forEach>
+    <c:if test="${not empty newsListByCategory}">
+        <c:forEach var="news" items="${newsListByCategory}">
+            <article class="news-item">
+                <img src="<c:out value='${news.imageUrl}' />" alt="News Image" />
+                <div>
+                    <h2><c:out value="${news.title}" /></h2>
+                    <p><c:out value="${news.brief}" /></p>
+                    <a href="Controller?command=go_to_news_page&newsId=<c:out value='${news.newsId}' />">Читать далее</a>
+                </div>
+            </article>
+        </c:forEach>
+    </c:if>
+    <c:if test="${empty newsListByCategory}">
+        <p>В данной категории пока нет новостей.</p>
+    </c:if>
 </main>
 
 <footer>
@@ -238,5 +222,3 @@
 
 </body>
 </html>
-
-

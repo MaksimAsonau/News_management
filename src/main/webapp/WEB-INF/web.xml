@@ -24,7 +24,7 @@
     </session-config>
 
     <listener>
-        <listener-class>by.asonau.web_project.dao.listener.ConnectionPoolInitializer</listener-class>
+        <listener-class>by.asonau.web_project.controller.listener.ConnectionPoolInitializer</listener-class>
     </listener>
 
 </web-app>

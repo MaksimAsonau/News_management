@@ -18,8 +18,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public class DoRegistration implements Command {
 
 	private final IUserService userService = ServiceProvider.getInstance().getUserService();
-
-	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -40,14 +38,12 @@ public class DoRegistration implements Command {
 				request.getRequestDispatcher("WEB-INF/jsp/reg-page.jsp").forward(request, response);
 				return;
 			}
-
 			// Проверка логина
 			if (userService.checkLoginExistsInDB(login)) {
 				request.setAttribute("registerError", "Пользователь с таким логином уже существует.");
 				request.getRequestDispatcher("WEB-INF/jsp/reg-page.jsp").forward(request, response);
 				return;
 			}
-
 			// Проверка почты
 			if (userService.checkEmailExistsInDB(email)) {
 				request.setAttribute("registerError", "Пользователь с такой почтой уже существует.");
@@ -78,7 +74,6 @@ public class DoRegistration implements Command {
 				String successMessage = "Поздравляем с успешной регистрацией. Войдите в ваш аккаунт.";
 				String encodedMessage = URLEncoder.encode(successMessage, StandardCharsets.UTF_8);
 				response.sendRedirect("Controller?command=go_to_authentication_page&successMessage=" + encodedMessage);
-
 			} else {
 				throw new ServiceException("Не удалось зарегистрировать пользователя.");
 			}

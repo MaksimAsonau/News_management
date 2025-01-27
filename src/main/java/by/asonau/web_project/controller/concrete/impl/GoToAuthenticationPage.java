@@ -14,9 +14,12 @@ public class GoToAuthenticationPage implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        Auth auth = (Auth) request.getSession(true).getAttribute("auth");
 
-//        Auth auth = (Auth) request.getSession(false).getAttribute("auth");
-
+        if (auth != null) {
+            System.out.println("Запрос страницы авторазации авторизированным пользователем");
+            response.sendRedirect("Controller?command=go_to_account_page");
+        }
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/auth-page.jsp");
         dispatcher.forward(request, response);

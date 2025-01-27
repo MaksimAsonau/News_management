@@ -12,10 +12,6 @@ import java.util.List;
 
 public class NewsServiceImpl implements INewsService {
 
-    private List<News> regularNewsList = new ArrayList<>();
-    private List<News> topNewsList = new ArrayList<>();
-    private List<News> breakingNewsList = new ArrayList<>();
-
     private final INewsDAO newsDAO = DAOProvider.getInstance().getNewsDAO();
 
     public NewsServiceImpl () {
@@ -39,53 +35,40 @@ public class NewsServiceImpl implements INewsService {
         }
     }
 
+    @Override
+    public List<News> getAuthorNewsList(int authorId) throws ServiceException {
+        try {
+            return newsDAO.getNewsByUserId(authorId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 
-    //
-//    @Override
-//    public int addNewsToDatabase(News news) throws ServiceException {
-//        return 0;
-//    }
-//
+    @Override
+    public List<News> getNewsListByCategoryId(int newsId) throws ServiceException {
+        try {
+            return newsDAO.getNewsByCategoryId(newsId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public int addNewsToDatabase(News news) throws ServiceException {
+        try {
+            return newsDAO.addNews(news);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
 //    @Override
 //    public boolean deleteNewsFromDatabase(int newsId) throws ServiceException {
 //        return false;
 //    }
-//
-//
-//    @Override
-//    public List<News> getAuthorNewsList(int authorId) throws ServiceException {
-//        return List.of();
-//    }
-//
-//    @Override
-//    public List<User> getAuthorByNewsId(int newsId) throws ServiceException {
-//        return List.of();
-//    }
-//
+
 //    @Override
 //    public boolean changeFieldData(int newsId, News news) throws ServiceException {
 //        return false;
-//    }
-//
-//    @Override
-//    public boolean addAuthorToNews(int newsId, int authId) throws ServiceException {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean addCoauthorToNews(int coauthorId, int newsId) throws ServiceException {
-//        return false;
-//    }
-
-    //    private final DAOProvider daoProvider;
-//    private final INewsDAO newsDAO;
-
-    //    public NewsServiceImpl() throws ServiceException {
-//        try {
-//            daoProvider = DAOProvider.getInstance();
-//            newsDAO = daoProvider.getNewsDAO();
-//        } catch (DAOException e) {
-//            throw new ServiceException(e);
-//        }
 //    }
 }

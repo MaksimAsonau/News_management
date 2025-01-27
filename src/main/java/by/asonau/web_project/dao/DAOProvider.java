@@ -1,6 +1,5 @@
 package by.asonau.web_project.dao;
 
-import by.asonau.web_project.dao.impl.NewsCategoryDAOImpl;
 import by.asonau.web_project.dao.impl.NewsDAOImpl;
 import by.asonau.web_project.dao.impl.UserDAOImpl;
 
@@ -11,7 +10,6 @@ public class DAOProvider {
     // Экземпляры DAO объектов, инициализируются по мере необходимости
 
     private IUserDAO sqlUserImpl;
-    private INewsCategoryDAO sqlNewsCategoryImpl;
     private INewsDAO sqlNewsImpl;
 
     private DAOProvider() {
@@ -31,13 +29,6 @@ public class DAOProvider {
             sqlUserImpl = new UserDAOImpl();
         }
         return sqlUserImpl;
-    }
-
-    public INewsCategoryDAO getNewsCategoryDAO() throws DAOException {
-        if (sqlNewsCategoryImpl == null) {
-            sqlNewsCategoryImpl = new NewsCategoryDAOImpl();
-        }
-        return sqlNewsCategoryImpl;
     }
 
     public INewsDAO getNewsDAO() throws DAOException {

@@ -1,5 +1,6 @@
 package by.asonau.web_project.service.impl;
 
+import by.asonau.web_project.bean.Auth;
 import by.asonau.web_project.bean.User;
 import by.asonau.web_project.bean.UserRole;
 import by.asonau.web_project.dao.DAOException;
@@ -23,7 +24,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User checkAuth(String login, String password) throws ServiceException {
+    public Auth checkAuth(String login, String password) throws ServiceException {
         try {
             return userDAO.logIn(login, password); // Может вернуть null
         } catch (DAOException e) {

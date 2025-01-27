@@ -1,8 +1,11 @@
 package by.asonau.web_project.dao.impl;
 
+import by.asonau.web_project.bean.News;
 import by.asonau.web_project.bean.User;
 import by.asonau.web_project.dao.dbmanager.ConnectionPool;
 import by.asonau.web_project.dao.dbmanager.ConnectionPoolException;
+
+import java.util.List;
 //import by.asonau.web_project.dao.IDatabaseConnectionDAO;
 
 public class UserDAOTest2 {
@@ -15,7 +18,17 @@ public class UserDAOTest2 {
         NewsDAOImpl newsDAO = new NewsDAOImpl();
         UserDAOImpl userDAO = new UserDAOImpl();
 
-        System.out.println(userDAO.doesLoginExistInDB("vasya") && userDAO.doesEmailExistInDB("vasyan@mail.ru"));
+//        List<News> listUserNews = newsDAO.getNewsByCategoryId(3);
+//        for (News listUserNew : listUserNews) {
+//            System.out.println(listUserNew);
+//        }
+
+        List<News> personalNewsList = newsDAO.getNewsByUserId(3);
+        for (News listUserNew : personalNewsList) {
+            System.out.println(listUserNew);
+        }
+
+//        System.out.println(userDAO.doesLoginExistInDB("vasya") && userDAO.doesEmailExistInDB("vasyan@mail.ru"));
 
 //        User user = userDAO.getUserInfoById(1);
 //        System.out.println(user);

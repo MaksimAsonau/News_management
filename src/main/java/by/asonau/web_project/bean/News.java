@@ -14,13 +14,33 @@ public class News implements Serializable {
 	private String imageUrl;
 	private LocalDate publishDate;
 	private String categoryName;
+	private int categoryId;
 	private String loginOfAuthor;
+	private int idOfAuthor;
 
 	public News(int newsId, String imageUrl, String brief, String title) {
 		this.newsId = newsId;
 		this.imageUrl = imageUrl;
 		this.brief = brief;
 		this.title = title;
+	}
+
+	public News(String title, String brief, String content, LocalDate publishDate, int categoryId, int idOfAuthor) {
+		this.title = title;
+		this.brief = brief;
+		this.content = content;
+		this.publishDate = publishDate;
+		this.categoryId = categoryId;
+		this.idOfAuthor = idOfAuthor;
+	}
+
+	public News(int newsId, String title, String brief, String content, LocalDate publishDate, String categoryName) {
+		this.newsId = newsId;
+		this.title = title;
+		this.brief = brief;
+		this.content = content;
+		this.publishDate = publishDate;
+		this.categoryName = categoryName;
 	}
 
 	public News(int newsId, String title, String brief, String content, String imageUrl, LocalDate publishDate, String categoryName, String loginOfAuthor) {
@@ -90,6 +110,14 @@ public class News implements Serializable {
 		this.categoryName = categoryName;
 	}
 
+	public int getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
+	}
+
 	public String getLoginOfAuthor() {
 		return loginOfAuthor;
 	}
@@ -98,17 +126,30 @@ public class News implements Serializable {
 		this.loginOfAuthor = loginOfAuthor;
 	}
 
+	public int getIdOfAuthor() {
+		return idOfAuthor;
+	}
+
+	public void setIdOfAuthor(int idOfAuthor) {
+		this.idOfAuthor = idOfAuthor;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		News news = (News) o;
-		return newsId == news.newsId && Objects.equals(title, news.title) && Objects.equals(brief, news.brief) && Objects.equals(content, news.content) && Objects.equals(imageUrl, news.imageUrl) && Objects.equals(publishDate, news.publishDate) && Objects.equals(categoryName, news.categoryName) && Objects.equals(loginOfAuthor, news.loginOfAuthor);
+		return newsId == news.newsId && categoryId == news.categoryId && idOfAuthor == news.idOfAuthor
+				&& Objects.equals(title, news.title) && Objects.equals(brief, news.brief)
+				&& Objects.equals(content, news.content) && Objects.equals(imageUrl, news.imageUrl)
+				&& Objects.equals(publishDate, news.publishDate) && Objects.equals(categoryName, news.categoryName)
+				&& Objects.equals(loginOfAuthor, news.loginOfAuthor);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(newsId, title, brief, content, imageUrl, publishDate, categoryName, loginOfAuthor);
+		return Objects.hash(newsId, title, brief, content, imageUrl, publishDate,
+				categoryName, categoryId, loginOfAuthor, idOfAuthor);
 	}
 
 	@Override
@@ -120,8 +161,10 @@ public class News implements Serializable {
 				", content='" + content + '\'' +
 				", imageUrl='" + imageUrl + '\'' +
 				", publishDate=" + publishDate +
-				", categoryName=" + categoryName +
+				", categoryName='" + categoryName + '\'' +
+				", categoryId=" + categoryId +
 				", loginOfAuthor='" + loginOfAuthor + '\'' +
+				", idOfAuthor=" + idOfAuthor +
 				'}';
 	}
 }

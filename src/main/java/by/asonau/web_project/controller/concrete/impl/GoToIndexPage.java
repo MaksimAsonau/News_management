@@ -25,15 +25,15 @@ public class GoToIndexPage implements Command{
             auth = (Auth) request.getSession(false).getAttribute("auth");
         }
 
-        ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        INewsService newsService = serviceProvider.getNewsService();
+        INewsService newsService = ServiceProvider.getInstance().getNewsService();
 
         try {
             List<News> allNewsList = newsService.getNewsList();
             request.setAttribute("allNews", allNewsList);
 
             if (auth != null) {
-                System.out.println("V seti user " + auth);
+                System.out.println("V seti user: " + auth);
+                System.out.println("User's role: " + auth.getRole().name().toLowerCase());
             } else {
                 System.out.println("V seti net zaregistrirovannogo usera");
             }

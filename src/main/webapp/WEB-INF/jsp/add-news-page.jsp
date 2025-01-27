@@ -1,17 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Регистрация</title>
+    <title>Создание новости</title>
     <style>
         :root {
             --primary-color: #2d3e50;
             --secondary-color: #e1e8f0;
             --accent-color: #0066cc;
-            --button-secondary-color: #1abc9c; /* Новый зелёный цвет кнопки */
+            --button-secondary-color: #1abc9c;
             --text-color: #333;
             --background-color: #f7f9fc;
         }
@@ -48,10 +47,8 @@
         .nav-bar {
             background-color: var(--secondary-color);
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
             padding: 10px 20px;
-            z-index: 1;
-            position: relative;
         }
 
         .nav-bar button {
@@ -69,58 +66,54 @@
             background-color: #1b2838;
         }
 
-        .container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px 0;
-            margin-top: -50px; /* Убираем transform */
-        }
-
-        .auth-container {
+        .form-container {
             background-color: var(--secondary-color);
             padding: 25px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 400px;
+            width: 600px; /* Увеличена ширина формы */
+            max-width: 80%; /* Ограничение ширины для маленьких экранов */
+            margin: 20px auto;
             text-align: center;
         }
 
-        .auth-container h2 {
+        .form-container h2 {
             margin-bottom: 20px;
             color: var(--primary-color);
             font-size: 20px;
         }
 
-        .auth-container input[type="text"],
-        .auth-container input[type="password"],
-        .auth-container input[type="email"],
-        .auth-container input[type="date"],
-        .auth-container select {
+        .form-container input[type="text"],
+        .form-container select,
+        .form-container textarea {
             width: 100%;
-            padding: 8px 10px;
-            margin: 8px 0;
+            padding: 10px 12px;
+            margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
         }
 
-        .auth-container button.register-btn {
+        .form-container textarea {
+            resize: none; /* Убираем возможность изменения размера */
+        }
+
+        .form-container button.submit-btn {
             padding: 10px 20px;
             width: 100%;
             border: none;
             border-radius: 4px;
             font-size: 16px;
             cursor: pointer;
-            background-color: var(--button-secondary-color); /* Зелёный цвет */
+            background-color: var(--button-secondary-color);
             color: white;
             transition: background-color 0.3s;
-            margin-top: 16px; /* Отступ от предыдущего поля */
         }
 
-        .auth-container button.register-btn:hover {
-            background-color: #16a085; /* Тёмно-зелёный при наведении */
+        .form-container button.submit-btn:hover {
+            background-color: #16a085;
         }
 
         footer {
@@ -129,12 +122,7 @@
             text-align: center;
             padding: 10px 0;
             font-size: 14px;
-        }
-
-        .error-message {
-            color: red;
-            font-size: 16px;
-            display: block;
+            margin-top: auto;
         }
     </style>
 </head>
@@ -150,32 +138,40 @@
     <form action="Controller" method="Get" style="margin: 0;">
         <button type="submit" name="command" value="GO_TO_INDEX_PAGE">На главную</button>
     </form>
+
+    <!-- Приветствие и кнопка "Личный кабинет" -->
+    <div>
+        <span>Добро пожаловать, <strong><c:out value="${sessionScope.login}" /></strong>!</span>
+        <span style="margin-left: 10px;"></span>
+        <form action="Controller" method="Get" style="display: inline;">
+            <button type="submit" name="command" value="GO_TO_ACCOUNT_PAGE">Личный кабинет</button>
+        </form>
+    </div>
 </div>
 
 <div class="container">
-    <div class="auth-container">
-        <h2>Регистрация</h2>
-        <div class="error-message" id="error-message">
-            <c:if test="${not empty requestScope.registerError}">
-                <c:out value="${requestScope.registerError}" />
-            </c:if>
-        </div>
+    <div class="form-container">
+        <h2>Создание новости</h2>
         <form action="Controller" method="post">
-            <input type="text" name="login" placeholder="Логин" required>
-            <input type="password" name="password" placeholder="Пароль" required>
-            <input type="password" name="confirmPassword" placeholder="Повторите пароль" required>
-            <input type="text" name="name" placeholder="Имя" required>
-            <input type="text" name="surname" placeholder="Фамилия" required>
-            <input type="email" name="email" placeholder="Почта" required>
-            <select name="role" required>
-                <option value="">Выберите роль</option>
-                <option value="admin">Админ</option>
-                <option value="author">Автор</option>
-                <option value="user">Пользователь</option>
+            <!-- Поле для заголовка -->
+            <input type="text" name="title" placeholder="Заголовок новости" maxlength="255" required>
+
+            <!-- Поле для брифа -->
+            <textarea name="brief" placeholder="Бриф новости" rows="3" maxlength="255" required></textarea>
+
+            <!-- Поле для основного текста -->
+            <textarea name="content" placeholder="Текст новости" rows="5" maxlength="255" required></textarea>
+
+            <!-- Выбор категории -->
+            <select name="categoryId" required>
+                <option value="">Выберите категорию</option>
+                <option value="1">IT</option>
+                <option value="2">Sport</option>
+                <option value="3">Cars</option>
             </select>
-            <input type="date" name="birthDate" placeholder="Дата рождения" required>
-            <input type="text" name="address" placeholder="Адрес" required>
-            <button class="register-btn" type="submit" name="command" value="do_registration">Зарегистрироваться</button>
+
+            <!-- Кнопка отправки -->
+            <button class="submit-btn" type="submit" name="command" value="DO_ADD_NEWS">Отправить</button>
         </form>
     </div>
 </div>

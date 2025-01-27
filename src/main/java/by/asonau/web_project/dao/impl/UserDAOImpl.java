@@ -1,5 +1,6 @@
 package by.asonau.web_project.dao.impl;
 
+import by.asonau.web_project.bean.Auth;
 import by.asonau.web_project.bean.User;
 import by.asonau.web_project.bean.UserRole;
 import by.asonau.web_project.dao.DAOException;
@@ -20,7 +21,7 @@ public class UserDAOImpl implements IUserDAO {
             "WHERE u.login = ? AND u.password = ?";
 
     @Override
-    public User logIn(String login, String password) throws DAOException {
+    public Auth logIn(String login, String password) throws DAOException {
 
         try (Connection connection = connectionPool.takeConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(QUERY_LOG_IN)) {
@@ -33,7 +34,7 @@ public class UserDAOImpl implements IUserDAO {
                     String user_login = resultSet.getString("login");
                     String roleName = resultSet.getString("role_name");
                     UserRole userRole = UserRole.valueOf(roleName.toUpperCase());
-                    return new User(id, user_login, userRole);
+                    return new Auth(id, user_login, userRole);
                 } else {
                     return null; // Возвращаем null, если пользователь не найден
                 }

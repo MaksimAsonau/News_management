@@ -13,12 +13,16 @@ public final class CommandProvider {
     public CommandProvider() {
         commands.put(CommandName.DO_AUTH, new DoAuth());
         commands.put(CommandName.DO_REGISTRATION, new DoRegistration());
+        commands.put(CommandName.DO_ADD_NEWS, new DoAddNews());
 
-        commands.put(CommandName.GO_TO_REGISTRATION_PAGE, new GoToRegistrationPage());
         commands.put(CommandName.GO_TO_INDEX_PAGE, new GoToIndexPage());
+        commands.put(CommandName.GO_TO_REGISTRATION_PAGE, new GoToRegistrationPage());
         commands.put(CommandName.GO_TO_AUTHENTICATION_PAGE, new GoToAuthenticationPage());
         commands.put(CommandName.GO_TO_NEWS_PAGE, new GoToNewsPage());
+        commands.put(CommandName.GO_TO_NEWS_BY_CATEGORY_PAGE, new GoToNewsByCategoryPage());
         commands.put(CommandName.GO_TO_ACCOUNT_PAGE, new GoToAccountPage());
+        commands.put(CommandName.GO_TO_ADD_NEWS_PAGE, new GoToAddNewsPage());
+        commands.put(CommandName.GO_TO_MY_NEWS_PAGE, new GoToMyNewsPage());
 
         commands.put(CommandName.NO_SUCH_COMMAND, new NoSuchCommand());
         commands.put(CommandName.LOGOUT, new Logout());
@@ -40,5 +44,4 @@ public final class CommandProvider {
         }
         return command;
     }
-
 }

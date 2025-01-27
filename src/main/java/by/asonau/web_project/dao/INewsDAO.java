@@ -14,6 +14,10 @@ public interface INewsDAO {
 
     News getNewsById(int id) throws DAOException;
 
+    List<News> getNewsByUserId(int id) throws DAOException;
+
+    List<News> getNewsByCategoryId(int id) throws DAOException;
+
 
 
 

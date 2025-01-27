@@ -4,7 +4,6 @@ import by.asonau.web_project.bean.Auth;
 import by.asonau.web_project.bean.News;
 import by.asonau.web_project.controller.concrete.Command;
 import by.asonau.web_project.service.INewsService;
-import by.asonau.web_project.service.ServiceException;
 import by.asonau.web_project.service.ServiceProvider;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -29,11 +28,9 @@ public class GoToNewsPage implements Command {
         }
 
         // Если пользователь авторизован, продолжаем обработку
-        ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        INewsService newsService = serviceProvider.getNewsService();
+        INewsService newsService = ServiceProvider.getInstance().getNewsService();
 
         String newsId = request.getParameter("newsId");
-
         News news = null;
 
         try {
