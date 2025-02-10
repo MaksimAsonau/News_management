@@ -14,9 +14,6 @@ public class NewsServiceImpl implements INewsService {
 
     private final INewsDAO newsDAO = DAOProvider.getInstance().getNewsDAO();
 
-    public NewsServiceImpl () {
-    }
-
     @Override
     public News getNewsFromDatabaseById(int newsId) throws ServiceException {
         try {
@@ -62,13 +59,21 @@ public class NewsServiceImpl implements INewsService {
         }
     }
 
-//    @Override
-//    public boolean deleteNewsFromDatabase(int newsId) throws ServiceException {
-//        return false;
-//    }
+    @Override
+    public boolean deleteNewsFromDatabase(int newsId) throws ServiceException {
+        try {
+            return newsDAO.deleteNews(newsId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 
-//    @Override
-//    public boolean changeFieldData(int newsId, News news) throws ServiceException {
-//        return false;
-//    }
+    @Override
+    public boolean updateNewsInDataBase(News news) throws ServiceException {
+        try {
+            return newsDAO.updateNews(news);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

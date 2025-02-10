@@ -15,9 +15,23 @@ public class NewsDAOImpl implements INewsDAO {
 
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
+
+    private static final String QUERY_DELETE_NEWS = "DELETE FROM news WHERE id = ?";
+
     @Override
     public boolean deleteNews(int newsId) throws DAOException {
-        return false;
+        try (Connection connection = connectionPool.takeConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_DELETE_NEWS)) {
+
+            preparedStatement.setInt(1, newsId);
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            return affectedRows > 0;
+
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new DAOException("Ошибка при удалении новости с ID: " + newsId, e);
+        }
     }
 
     private static final String QUERY_ADD_NEWS =
@@ -30,7 +44,6 @@ public class NewsDAOImpl implements INewsDAO {
         try (Connection connection = connectionPool.takeConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(QUERY_ADD_NEWS, Statement.RETURN_GENERATED_KEYS)) {
 
-            // Устанавливаем параметры в запрос
             preparedStatement.setString(1, news.getTitle());
             preparedStatement.setString(2, news.getBrief());
             preparedStatement.setString(3, news.getContent());
@@ -38,18 +51,15 @@ public class NewsDAOImpl implements INewsDAO {
             preparedStatement.setInt(5, news.getCategoryId());
             preparedStatement.setInt(6, news.getIdOfAuthor());
 
-            // Выполняем запрос
             int affectedRows = preparedStatement.executeUpdate();
 
-            // Проверяем, были ли добавлены строки
             if (affectedRows == 0) {
                 throw new DAOException("Adding news failed, no rows affected.");
             }
 
-            // Получаем сгенерированный ключ (id)
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1); // Возвращаем сгенерированный id
+                    return generatedKeys.getInt(1);
                 } else {
                     throw new DAOException("Adding news failed, no ID obtained.");
                 }
@@ -81,7 +91,6 @@ public class NewsDAOImpl implements INewsDAO {
                 String brief = resultSet.getString("brief");
                 String imageUrl = resultSet.getString("image_path");
 
-                // Используем упрощенный конструктор News
                 News news = new News(id, imageUrl, brief, title);
                 newsList.add(news);
             }
@@ -108,7 +117,7 @@ public class NewsDAOImpl implements INewsDAO {
         try (Connection connection = connectionPool.takeConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_NEWS_BY_ID)) {
 
-            preparedStatement.setInt(1, id); // Устанавливаем ID новости
+            preparedStatement.setInt(1, id);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -122,10 +131,9 @@ public class NewsDAOImpl implements INewsDAO {
                     String imageUrl = resultSet.getString("category_image");
                     String authorLogin = resultSet.getString("author_login");
 
-                    // Возвращаем объект News
                     return new News(newsId, title, brief, content, imageUrl, publishDate, categoryName, authorLogin);
                 } else {
-                    return null; // Если новость не найдена
+                    return null;
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {
@@ -156,7 +164,6 @@ public class NewsDAOImpl implements INewsDAO {
                     String brief = resultSet.getString("brief");
                     String imageUrl = resultSet.getString("image_path");
 
-                    // Создаем объект News с указанным конструктором
                     News news = new News(id, imageUrl, brief, title);
                     newsList.add(news);
                 }
@@ -191,7 +198,6 @@ public class NewsDAOImpl implements INewsDAO {
                     String brief = resultSet.getString("brief");
                     String imageUrl = resultSet.getString("image_path");
 
-                    // Создаем объект News
                     News news = new News(id, imageUrl, brief, title);
                     newsList.add(news);
                 }
@@ -203,4 +209,27 @@ public class NewsDAOImpl implements INewsDAO {
 
         return newsList;
     }
+
+    private static final String QUERY_UPDATE_NEWS =
+            "UPDATE news SET title = ?, brief = ?, content = ?, category_id = ? WHERE id = ?";
+
+    @Override
+    public boolean updateNews(News news) throws DAOException {
+        try (Connection connection = connectionPool.takeConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_UPDATE_NEWS)) {
+
+            preparedStatement.setString(1, news.getTitle());
+            preparedStatement.setString(2, news.getBrief());
+            preparedStatement.setString(3, news.getContent());
+            preparedStatement.setInt(4, news.getCategoryId());
+            preparedStatement.setInt(5, news.getNewsId());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            return affectedRows > 0; // Возвращает true, если хотя бы одна строка была обновлена
+
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new DAOException("Ошибка при обновлении новости с ID: " + news.getNewsId(), e);
+        }
+    }
+
 }

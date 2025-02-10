@@ -7,15 +7,12 @@ public class DAOProvider {
 
     private static DAOProvider instance;
 
-    // Экземпляры DAO объектов, инициализируются по мере необходимости
-
     private IUserDAO sqlUserImpl;
     private INewsDAO sqlNewsImpl;
 
     private DAOProvider() {
     }
 
-    // Метод для получения синглтон-экземпляра DAOFactory
     public static DAOProvider getInstance() {
         if (instance == null) {
             instance = new DAOProvider();
@@ -23,7 +20,6 @@ public class DAOProvider {
         return instance;
     }
 
-    // Методы для получения DAO объектов
     public IUserDAO getUserDAO() throws DAOException {
         if (sqlUserImpl == null) {
             sqlUserImpl = new UserDAOImpl();

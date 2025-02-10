@@ -177,4 +177,91 @@ public class UserDAOImpl implements IUserDAO {
             throw new DAOException("Ошибка подключения к базе данных.", e);
         }
     }
+
+    private static final String QUERY_GET_USER_INFO_FOR_EDIT =
+            "SELECT u.id, u.login, u.password, u.name AS first_name, u.surname, u.email, " +
+                    "ud.date_birthday, ud.address " +
+                    "FROM user u " +
+                    "LEFT JOIN user_details ud ON u.id = ud.user_id " +
+                    "WHERE u.id = ?";
+
+    @Override
+    public User getUserInfoForEdit(int id) {
+
+        try (Connection connection = connectionPool.takeConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_USER_INFO_FOR_EDIT)) {
+
+            // Устанавливаем параметр ID
+            preparedStatement.setInt(1, id);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    // Извлекаем данные из ResultSet
+                    int userId = resultSet.getInt("id");
+                    String login = resultSet.getString("login");
+                    String password = resultSet.getString("password"); // Теперь включен пароль
+                    String name = resultSet.getString("first_name");
+                    String surname = resultSet.getString("surname");
+                    String email = resultSet.getString("email");
+                    LocalDate birthdayDate = resultSet.getDate("date_birthday") != null
+                            ? resultSet.getDate("date_birthday").toLocalDate() : null;
+                    String address = resultSet.getString("address");
+
+                    // Создаем объект User (без роли)
+                    return new User(userId, login, password, name, surname, email, birthdayDate, address);
+                } else {
+                    throw new DAOException("User with ID " + id + " not found.");
+                }
+            }
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new DAOException("Error retrieving user info for editing by ID: " + id, e);
+        }
+    }
+
+    private static final String QUERY_UPDATE_USER =
+            "UPDATE user SET login = ?, name = ?, surname = ?, email = ? WHERE id = ?";
+    private static final String QUERY_UPDATE_USER_DETAILS =
+            "UPDATE user_details SET date_birthday = ?, address = ? WHERE user_id = ?";
+
+    @Override
+    public boolean updateUser(User user) throws DAOException {
+        try (Connection connection = connectionPool.takeConnection()) {
+            connection.setAutoCommit(false);
+
+            try (PreparedStatement updateUserStmt = connection.prepareStatement(QUERY_UPDATE_USER);
+                 PreparedStatement updateUserDetailsStmt = connection.prepareStatement(QUERY_UPDATE_USER_DETAILS)) {
+
+                // Обновляем данные в таблице user
+                updateUserStmt.setString(1, user.getLogin());
+                updateUserStmt.setString(2, user.getName());
+                updateUserStmt.setString(3, user.getSurname());
+                updateUserStmt.setString(4, user.getEmail());
+                updateUserStmt.setInt(5, user.getId());
+
+                int affectedRowsUser = updateUserStmt.executeUpdate();
+
+                // Обновляем данные в таблице user_details
+                updateUserDetailsStmt.setObject(1, user.getBirthdayDate() != null ? user.getBirthdayDate() : null);
+                updateUserDetailsStmt.setString(2, user.getAddress());
+                updateUserDetailsStmt.setInt(3, user.getId());
+
+                int affectedRowsDetails = updateUserDetailsStmt.executeUpdate();
+
+                // Фиксируем изменения
+                connection.commit();
+                return affectedRowsUser > 0 || affectedRowsDetails > 0;
+
+            } catch (SQLException e) {
+                connection.rollback();
+                throw new DAOException("Ошибка при обновлении профиля пользователя", e);
+            } finally {
+                connection.setAutoCommit(true);
+            }
+
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new DAOException("Ошибка соединения при обновлении профиля", e);
+        }
+    }
+
+
 }

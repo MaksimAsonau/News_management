@@ -47,28 +47,16 @@ public final class ConnectionPool {
      * {@link PooledConnection} перед добавлением в очередь соединений.
      */
     public void initPoolData() throws ConnectionPoolException {
-        //устанавливается языковая среда англ (для считывания свойств из файла с пропертями?)
         Locale.setDefault(Locale.ENGLISH);
         try {
-            //инициализация драйвера
             Class.forName(driverName);
-
-            //Когда клиент приходит:
-            //Если клиент хочет взять коньки, вы сначала проверяете connectionQueue, чтобы увидеть, какие коньки доступны для проката.
-            //Выдача коньков:
-            // После того как вы выдаете коньки клиенту, вы перемещаете их в givenAwayConQueue, чтобы отслеживать, что они находятся в использовании.
-            //Возврат коньков:
-            // Когда клиент возвращает коньки, вы удаляете их из givenAwayConQueue и возвращаете обратно в connectionQueue, чтобы они снова стали доступными для других клиентов.
 
             givenAwayConQueue = new ArrayBlockingQueue<>(poolSize);
             connectionQueue = new ArrayBlockingQueue<>(poolSize);
 
             for (int i = 0; i < poolSize; i++) {
-                //берем коньки
                 Connection connection = DriverManager.getConnection(url, user, password);
-                //оборачиваем в пакет для отслеживания
                 PooledConnection pooledConnection = new PooledConnection(connection);
-                //коньки доступны для проката
                 connectionQueue.add(pooledConnection);
             }
         } catch (SQLException e) {
@@ -82,9 +70,7 @@ public final class ConnectionPool {
     public Connection takeConnection() throws ConnectionPoolException {
         Connection connection = null;
         try {
-            //берем коньки из очереди доступных к прокату
             connection = connectionQueue.take();
-            //добавляем в выданные
             givenAwayConQueue.add(connection);
         } catch (InterruptedException e) {
             throw new ConnectionPoolException(
@@ -102,23 +88,17 @@ public final class ConnectionPool {
             closeConnectionsQueue(givenAwayConQueue);
             closeConnectionsQueue(connectionQueue);
         } catch (SQLException e) {
-// logger.log(Level.ERROR, "Error closing the connection.", e);
+            // logger.log(Level.ERROR, "Error closing the connection.", e);
         }
     }
 
     private void closeConnectionsQueue(BlockingQueue<Connection> queue)
             throws SQLException {
         Connection connection;
-        //извлекает соединение из очереди, если оно доступно.
-        //Если очередь пуста, метод вернет null, и цикл завершится.
         while ((connection = queue.poll()) != null) {
-            //проверяет, находится ли соединение в режиме автоматической фиксации.
-            //Если нет (то есть транзакция активна), мы вызываем connection.commit(),
-            // чтобы подтвердить все изменения, сделанные в рамках этой транзакции.
             if (!connection.getAutoCommit()) {
                 connection.commit();
             }
-            //освобождаем ресурсы
             ((PooledConnection) connection).reallyClose();
         }
     }
@@ -127,17 +107,17 @@ public final class ConnectionPool {
         try {
             con.close();
         } catch (SQLException e) {
-// logger.log(Level.ERROR, "Connection isn't return to the pool.");
+            // logger.log(Level.ERROR, "Connection isn't return to the pool.");
         }
         try {
             rs.close();
         } catch (SQLException e) {
-// logger.log(Level.ERROR, "ResultSet isn't closed.");
+            // logger.log(Level.ERROR, "ResultSet isn't closed.");
         }
         try {
             st.close();
         } catch (SQLException e) {
-// logger.log(Level.ERROR, "Statement isn't closed.");
+            // logger.log(Level.ERROR, "Statement isn't closed.");
         }
     }
 
@@ -145,12 +125,12 @@ public final class ConnectionPool {
         try {
             con.close();
         } catch (SQLException e) {
-// logger.log(Level.ERROR, "Connection isn't return to the pool.");
+            // logger.log(Level.ERROR, "Connection isn't return to the pool.");
         }
         try {
             st.close();
         } catch (SQLException e) {
-// logger.log(Level.ERROR, "Statement isn't closed.");
+            // logger.log(Level.ERROR, "Statement isn't closed.");
         }
     }
 

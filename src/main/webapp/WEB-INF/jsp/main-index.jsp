@@ -220,6 +220,14 @@
 </div>
 
 <main>
+    <!-- Блок сообщения -->
+    <c:if test="${not empty param.message}">
+        <p style="color: green; font-weight: bold; text-align: center; padding: 10px; border: 1px solid green; background-color: #e6ffe6;">
+            <c:out value="${param.message}" />
+        </p>
+    </c:if>
+
+    <!-- Список новостей -->
     <c:forEach var="news" items="${allNews}">
         <article class="news-item">
             <img src="<c:out value='${news.imageUrl}' />" alt="News Image" />
@@ -231,6 +239,19 @@
         </article>
     </c:forEach>
 </main>
+
+<%--<main>--%>
+<%--    <c:forEach var="news" items="${allNews}">--%>
+<%--        <article class="news-item">--%>
+<%--            <img src="<c:out value='${news.imageUrl}' />" alt="News Image" />--%>
+<%--            <div>--%>
+<%--                <h2><c:out value="${news.title}" /></h2>--%>
+<%--                <p><c:out value="${news.brief}" /></p>--%>
+<%--                <a href="Controller?command=go_to_news_page&newsId=<c:out value='${news.newsId}' />">Читать далее</a>--%>
+<%--            </div>--%>
+<%--        </article>--%>
+<%--    </c:forEach>--%>
+<%--</main>--%>
 
 <footer>
     <p>&copy; 2025 Offliner</p>

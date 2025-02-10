@@ -18,7 +18,5 @@ public interface INewsDAO {
 
     List<News> getNewsByCategoryId(int id) throws DAOException;
 
-
-
-
+    boolean updateNews(News news) throws  DAOException;
 }

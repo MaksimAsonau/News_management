@@ -25,6 +25,14 @@ public class News implements Serializable {
 		this.title = title;
 	}
 
+	public News(int newsId, String title, String brief, String content, int categoryId) {
+		this.newsId = newsId;
+		this.title = title;
+		this.brief = brief;
+		this.content = content;
+		this.categoryId = categoryId;
+	}
+
 	public News(String title, String brief, String content, LocalDate publishDate, int categoryId, int idOfAuthor) {
 		this.title = title;
 		this.brief = brief;

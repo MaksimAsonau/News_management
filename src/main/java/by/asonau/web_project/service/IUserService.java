@@ -11,11 +11,14 @@ public interface IUserService {
 
     User getUserInfoById (int id) throws ServiceException;
 
+    User getUserInfoForEdit (int id) throws ServiceException;
+
     int checkUserReg(User user) throws ServiceException;
 
     boolean checkLoginExistsInDB(String login) throws ServiceException;
 
     boolean checkEmailExistsInDB(String login) throws ServiceException;
 
-    int getRoleId (UserRole role) throws ServiceException;
+    boolean updateUserInDatabase(User user) throws ServiceException;
+
 }

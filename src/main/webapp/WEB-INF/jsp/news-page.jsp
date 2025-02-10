@@ -51,7 +51,7 @@
             background-color: #e1e8f0;
             padding: 15px;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
         }
 
@@ -124,6 +124,42 @@
             padding-top: 10px;
             margin-top: 20px;
         }
+
+        /* Стили для кнопок */
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .edit-button {
+            background-color: #38596c;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .edit-button:hover {
+            background-color: #28404f;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
@@ -134,16 +170,13 @@
 </header>
 
 <!-- Приветствие пользователя -->
-<div class="auth" style="justify-content: space-between;">
-    <!-- Кнопка "На главную" -->
-    <form action="Controller" method="Get" style="display: inline;">
+<div class="auth">
+    <form action="Controller" method="Get">
         <button type="submit" name="command" value="GO_TO_INDEX_PAGE">На главную</button>
     </form>
 
-    <!-- Приветствие и кнопка "Личный кабинет" -->
     <div>
-        <span>Добро пожаловать, <strong><c:out value="${sessionScope.login}" /></strong>!</span>
-        <span style="margin-left: 10px;"></span>
+        <span>Добро пожаловать, <strong><c:out value="${sessionScope.login}"/></strong>!</span>
         <form action="Controller" method="Get" style="display: inline;">
             <button type="submit" name="command" value="GO_TO_ACCOUNT_PAGE">Личный кабинет</button>
         </form>
@@ -152,32 +185,49 @@
 
 <!-- Основной контент -->
 <main>
+    <!-- Блок сообщения -->
+    <c:if test="${not empty param.message}">
+        <p style="color: green; font-weight: bold; text-align: center; padding: 10px; border: 1px solid green; background-color: #e6ffe6; margin-bottom: 20px;">
+            <c:out value="${param.message}" />
+        </p>
+    </c:if>
+
     <c:choose>
         <c:when test="${not empty news}">
             <div class="news-container">
-                <!-- Картинка новости -->
                 <img src="<c:out value='${news.imageUrl}' />" alt="News Image" class="news-image"/>
 
-                <!-- Блок текста -->
                 <div class="news-text">
-                    <!-- Заголовок новости -->
-                    <h1 class="news-title"><c:out value="${news.title}" /></h1>
-
-                    <!-- Краткое описание -->
-                    <p class="news-brief"><c:out value="${news.brief}" /></p>
-
-                    <!-- Полный контент -->
-                    <p class="news-content"><c:out value="${news.content}" /></p>
+                    <h1 class="news-title"><c:out value="${news.title}"/></h1>
+                    <p class="news-brief"><c:out value="${news.brief}"/></p>
+                    <p class="news-content"><c:out value="${news.content}"/></p>
                 </div>
             </div>
 
-            <!-- Информация о новости -->
-
             <div class="news-meta" style="text-align: right;">
-                Автор новости: <strong><c:out value="${news.loginOfAuthor}" /></strong>,
-                Категория новости: <strong><c:out value="${news.categoryName}" /></strong>,
-                Дата публикации: <strong><c:out value="${news.publishDate}" /></strong>
+                Автор новости: <strong><c:out value="${news.loginOfAuthor}"/></strong>,
+                Категория новости: <strong><c:out value="${news.categoryName}"/></strong>,
+                Дата публикации: <strong><c:out value="${news.publishDate}"/></strong>
             </div>
+
+            <!-- Кнопки управления новостью -->
+            <c:if test="${sessionScope.role == 'admin' or sessionScope.login == news.loginOfAuthor}">
+                <div class="action-buttons">
+                    <form action="Controller" method="post">
+                        <input type="hidden" name="newsId" value="${news.newsId}">
+                        <button type="submit" name="command" value="GO_TO_EDIT_NEWS_PAGE" class="edit-button">
+                            Редактировать новость
+                        </button>
+                    </form>
+                    <form action="Controller" method="post"
+                          onsubmit="return confirm('Вы уверены, что хотите удалить новость?');">
+                        <input type="hidden" name="newsId" value="${news.newsId}">
+                        <button type="submit" name="command" value="DO_DELETE_NEWS" class="delete-button">Удалить новость
+                        </button>
+                    </form>
+                </div>
+            </c:if>
+
         </c:when>
 
         <c:otherwise>
@@ -192,5 +242,3 @@
 
 </body>
 </html>
-
-

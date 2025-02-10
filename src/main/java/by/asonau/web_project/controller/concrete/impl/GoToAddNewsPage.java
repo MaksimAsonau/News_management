@@ -38,5 +38,4 @@ public class GoToAddNewsPage implements Command {
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/add-news-page.jsp");
         dispatcher.forward(request, response);
     }
-
 }

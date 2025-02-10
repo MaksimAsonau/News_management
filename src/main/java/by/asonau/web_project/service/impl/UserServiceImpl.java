@@ -13,20 +13,28 @@ public class UserServiceImpl implements IUserService {
 
     private final IUserDAO userDAO = DAOProvider.getInstance().getUserDAO();
 
-    // Возвращает юзера для личного кабинета
     @Override
     public User getUserInfoById(int id) throws ServiceException {
         try {
-            return userDAO.getUserInfoById(id); // Может вернуть null
+            return userDAO.getUserInfoById(id);
         } catch (DAOException e) {
             throw new ServiceException("Ошибка на уровне DAO при получении информации о пользователе", e);
         }
     }
 
     @Override
+    public User getUserInfoForEdit(int id) throws ServiceException {
+        try {
+            return userDAO.getUserInfoForEdit(id);
+        } catch (DAOException e) {
+            throw new ServiceException("Ошибка при получении информации о пользователе для редактирования", e);
+        }
+    }
+
+    @Override
     public Auth checkAuth(String login, String password) throws ServiceException {
         try {
-            return userDAO.logIn(login, password); // Может вернуть null
+            return userDAO.logIn(login, password);
         } catch (DAOException e) {
             throw new ServiceException("Ошибка на уровне DAO при авторизации пользователя", e);
         }
@@ -60,7 +68,11 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public int getRoleId(UserRole role) throws ServiceException {
-        return 0;
+    public boolean updateUserInDatabase(User user) throws ServiceException {
+        try {
+            return userDAO.updateUser(user);
+        } catch (DAOException e) {
+            throw new ServiceException("Ошибка при обновлении профиля", e);
+        }
     }
 }

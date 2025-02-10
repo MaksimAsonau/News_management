@@ -11,8 +11,11 @@ public interface IUserDAO {
 
     boolean doesEmailExistInDB(String email) throws DAOException;
 
-    User getUserInfoById(int id);
+    User getUserInfoById(int id) throws DAOException;
+
+    User getUserInfoForEdit(int id) throws DAOException;
 
     int registerUserInDatabase(User user)  throws DAOException;
 
+    boolean updateUser(User user) throws DAOException;
 }

@@ -19,7 +19,6 @@ public class GoToIndexPage implements Command{
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        // Проверяем существование сессии
         Auth auth = null;
         if (request.getSession(false) != null) {
             auth = (Auth) request.getSession(false).getAttribute("auth");

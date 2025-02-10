@@ -17,17 +17,14 @@ public class GoToNewsPage implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        // Проверяем, есть ли объект auth в сессии
         Auth auth = (Auth) request.getSession().getAttribute("auth");
 
         if (auth == null) {
-            // Если пользователь не авторизован, добавляем предупреждение
             request.getSession().setAttribute("warningMessage", "Для просмотра новости войдите или зарегистрируйтесь.");
             response.sendRedirect("Controller?command=go_to_index_page");
             return;
         }
 
-        // Если пользователь авторизован, продолжаем обработку
         INewsService newsService = ServiceProvider.getInstance().getNewsService();
 
         String newsId = request.getParameter("newsId");

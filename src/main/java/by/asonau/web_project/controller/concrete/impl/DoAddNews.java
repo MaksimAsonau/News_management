@@ -53,7 +53,8 @@ public class DoAddNews implements Command {
 
             if (newsId > 0) {
                 // Успешное добавление, редирект на страницу новости
-                response.sendRedirect("Controller?command=go_to_news_page&newsId=" + newsId);
+                response.sendRedirect("Controller?command=go_to_news_page&newsId=" + newsId
+                        + "&message=News+added+successfully");
             } else {
                 // Если новость не добавлена, редирект на страницу ошибки
                 response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Failed+to+add+news");

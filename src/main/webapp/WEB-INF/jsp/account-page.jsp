@@ -180,13 +180,21 @@
     </form>
     <div class="auth-actions">
         <form action="Controller" method="Get">
-            <button type="submit" name="command" value="GO_TO_EDIT_PROFILE">Редактировать профиль</button>
+            <button type="submit" name="command" value="GO_TO_EDIT_ACCOUNT_PAGE">Редактировать профиль</button>
         </form>
         <form action="Controller" method="Get">
             <button type="submit" name="command" value="LOGOUT" class="logout">Выйти из профиля</button>
         </form>
     </div>
 </div>
+
+<!-- Вывод сообщения о результате обновления профиля -->
+<c:if test="${not empty param.message}">
+    <p style="color: green; font-weight: bold; text-align: center; padding: 10px; border: 1px solid green; background-color: #e6ffe6; margin-bottom: 20px;">
+        <c:out value="${param.message}" />
+    </p>
+</c:if>
+
 
 <!-- Основной контент -->
 <main>

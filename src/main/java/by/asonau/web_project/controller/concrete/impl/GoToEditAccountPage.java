@@ -1,9 +1,8 @@
 package by.asonau.web_project.controller.concrete.impl;
 
-import by.asonau.web_project.bean.News;
+import by.asonau.web_project.bean.Auth;
 import by.asonau.web_project.bean.User;
 import by.asonau.web_project.controller.concrete.Command;
-import by.asonau.web_project.service.INewsService;
 import by.asonau.web_project.service.IUserService;
 import by.asonau.web_project.service.ServiceException;
 import by.asonau.web_project.service.ServiceProvider;
@@ -13,35 +12,34 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.List;
 
-public class GoToAccountPage implements Command {
-
+public class GoToEditAccountPage implements Command {
     private final IUserService userService = ServiceProvider.getInstance().getUserService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Object sessionUserId = request.getSession().getAttribute("id");
-        if (!(sessionUserId instanceof Integer)) {
-            response.sendRedirect("Controller?command=go_to_error_page&error=invalid_session");
+        Auth auth = (Auth) request.getSession().getAttribute("auth");
+
+        if (auth == null) {
+            request.getSession().setAttribute("warningMessage", "Для редактирования профиля войдите в систему.");
+            response.sendRedirect("Controller?command=go_to_index_page");
             return;
         }
 
-        int userId = (int) sessionUserId;
+        int userId = auth.getId();
 
         try {
-            User user = userService.getUserInfoById(userId);
+            User user = userService.getUserInfoForEdit(userId);
 
-            if (user != null) {
-                request.setAttribute("user", user);
-            }
+            request.setAttribute("user", user);
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/account-page.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/edit-account-page.jsp");
             dispatcher.forward(request, response);
 
         } catch (ServiceException e) {
-            response.sendRedirect("Controller?command=go_to_error_page");
+            request.getSession().setAttribute("errorMessage", "Ошибка сервера при загрузке профиля.");
+            response.sendRedirect("Controller?command=go_to_index_page");
         }
     }
 }

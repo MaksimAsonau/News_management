@@ -9,7 +9,7 @@ public interface INewsService {
 
     int addNewsToDatabase(News news) throws ServiceException;
 
-//    boolean deleteNewsFromDatabase(int newsId) throws ServiceException;
+    boolean deleteNewsFromDatabase(int newsId) throws ServiceException;
 
     News getNewsFromDatabaseById(int newsId) throws ServiceException;
 
@@ -19,6 +19,5 @@ public interface INewsService {
 
     List<News> getNewsListByCategoryId(int newsId) throws ServiceException;
 
-//    List<User> getAuthorByNewsId(int newsId) throws ServiceException;
-
+    boolean updateNewsInDataBase(News news) throws ServiceException;
 }

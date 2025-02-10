@@ -56,17 +56,7 @@ public class DoRegistration implements Command {
 			LocalDate birthLocalDate = LocalDate.parse(birthDate);
 			LocalDate registrationDate = LocalDate.now();
 
-			User newUser = new User(
-					login,
-					password,
-					userRole,
-					name,
-					surname,
-					email,
-					birthLocalDate,
-					registrationDate,
-					address
-			);
+			User newUser = new User(login, password, userRole, name, surname, email, birthLocalDate, registrationDate, address);
 
 			// Регистрация пользователя
 			int result = userService.checkUserReg(newUser);
