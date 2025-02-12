@@ -38,8 +38,7 @@ public class GoToEditAccountPage implements Command {
             dispatcher.forward(request, response);
 
         } catch (ServiceException e) {
-            request.getSession().setAttribute("errorMessage", "Ошибка сервера при загрузке профиля.");
-            response.sendRedirect("Controller?command=go_to_index_page");
+            response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Server+error");
         }
     }
 }

@@ -27,10 +27,10 @@ public final class CommandProvider {
         commands.put(CommandName.GO_TO_MY_NEWS_PAGE, new GoToMyNewsPage());
         commands.put(CommandName.GO_TO_EDIT_NEWS_PAGE, new GoToEditNewsPage());
         commands.put(CommandName.GO_TO_EDIT_ACCOUNT_PAGE, new GoToEditAccountPage());
+        commands.put(CommandName.GO_TO_ERROR_PAGE, new GoToErrorPage());
 
         commands.put(CommandName.NO_SUCH_COMMAND, new NoSuchCommand());
         commands.put(CommandName.LOGOUT, new Logout());
-        commands.put(CommandName.GENERATE_ERROR, new GenerateError());
     }
 
     public Command takeCommand(String userCommand) {
@@ -43,7 +43,9 @@ public final class CommandProvider {
             commandName = CommandName.valueOf(userCommand.toUpperCase());
             command = commands.get(commandName);
         } catch (IllegalArgumentException | NullPointerException e) {
-            command = commands.get(CommandName.GENERATE_ERROR);
+            System.err.println("Unknown command: " + userCommand);
+            e.printStackTrace();
+            command = commands.get(CommandName.NO_SUCH_COMMAND);
         }
         return command;
     }

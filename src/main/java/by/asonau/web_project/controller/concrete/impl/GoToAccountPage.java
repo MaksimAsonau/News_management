@@ -41,7 +41,7 @@ public class GoToAccountPage implements Command {
             dispatcher.forward(request, response);
 
         } catch (ServiceException e) {
-            response.sendRedirect("Controller?command=go_to_error_page");
+            response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Server+error");
         }
     }
 }

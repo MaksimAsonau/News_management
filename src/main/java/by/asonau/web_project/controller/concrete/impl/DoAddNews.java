@@ -44,10 +44,8 @@ public class DoAddNews implements Command {
             int idOfAuthor = (int) session.getAttribute("id"); // ID автора из сессии
             LocalDate publishDate = LocalDate.now();
 
-            // Создаем объект News
             News news = new News(title, brief, content, publishDate, categoryId, idOfAuthor);
 
-            // Вызываем метод сервиса для добавления новости
             INewsService newsService = ServiceProvider.getInstance().getNewsService();
             int newsId = newsService.addNewsToDatabase(news);
 

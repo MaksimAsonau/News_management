@@ -39,7 +39,7 @@ public class GoToIndexPage implements Command{
 
         } catch (ServiceException e) {
             e.printStackTrace();
-            request.setAttribute("errorMessage", "Oshibka pri poluchenii novostei.");
+            response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Server+error");
         }
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main-index.jsp");

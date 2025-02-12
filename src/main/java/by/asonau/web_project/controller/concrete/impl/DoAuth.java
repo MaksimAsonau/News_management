@@ -44,8 +44,7 @@ public class DoAuth implements Command {
             response.sendRedirect("Controller?command=go_to_index_page");
 
         } catch (ServiceException e) {
-            // Ошибка на уровне сервиса
-            response.sendRedirect("Controller?command=go_to_authentication_page&authError=Service+error+occurred");
+            response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Service+error+occurred");
         }
     }
 }

@@ -43,7 +43,7 @@ public class GoToMyNewsPage implements Command {
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("Controller?command=go_to_error_page");
+            response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Server+error");
         }
     }
 }

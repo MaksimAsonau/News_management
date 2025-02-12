@@ -51,9 +51,9 @@ public class DoEditNews implements Command {
                 response.sendRedirect("Controller?command=go_to_edit_news_page&newsId=" + newsId + "&error=Failed+to+update+news");
             }
         } catch (NumberFormatException e) {
-            response.sendRedirect("Controller?command=go_to_index_page&error=Invalid+news+ID+or+category+ID");
+            response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Invalid+news+ID+or+category+ID");
         } catch (ServiceException e) {
-            response.sendRedirect("Controller?command=go_to_index_page&error=Server+error");
+            response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Server+error");
         }
     }
 }

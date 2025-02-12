@@ -179,6 +179,7 @@
     </form>
 </div>
 
+<!-- Блок авторизации -->
 <div class="container">
     <div class="auth-container">
         <h2>Авторизация</h2>

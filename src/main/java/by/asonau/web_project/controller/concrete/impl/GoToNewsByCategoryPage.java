@@ -26,7 +26,7 @@ public class GoToNewsByCategoryPage implements Command {
             newsListByCategory = newsService.getNewsListByCategoryId(Integer.parseInt(categoryId));
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("errorMessage", "Ошибка при загрузке новостей. Попробуйте позже.");
+            response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Server+error");
         }
 
         if (newsListByCategory != null) {

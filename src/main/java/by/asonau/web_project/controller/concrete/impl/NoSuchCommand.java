@@ -11,8 +11,6 @@ public class NoSuchCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().print("Нет такой команды!");
-		
+		response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Unknown+command");
 	}
 }

@@ -69,8 +69,7 @@ public class DoRegistration implements Command {
 			}
 
 		} catch (ServiceException e) {
-			request.setAttribute("registerError", "Ошибка регистрации: " + e.getMessage());
-			request.getRequestDispatcher("WEB-INF/jsp/reg-page.jsp").forward(request, response);
+			response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Register+error");
 		}
 	}
 }

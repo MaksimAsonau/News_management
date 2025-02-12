@@ -41,7 +41,7 @@ public class DoDeleteNews implements Command {
                 response.sendRedirect("Controller?command=go_to_news_page&newsId=" + newsId + "&error=Failed+to+delete+news");
             }
         } catch (ServiceException e) {
-            response.sendRedirect("Controller?command=go_to_news_page&newsId=" + newsId + "&error=Server+error");
+            response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Failed+to+delete+news");
         }
     }
 }

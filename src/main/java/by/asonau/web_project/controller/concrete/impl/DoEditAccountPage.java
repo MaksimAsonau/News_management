@@ -74,7 +74,6 @@ public class DoEditAccountPage implements Command {
             }
 
             User newUser = new User(userId, login, oldUser.getPassword(), name, surname, email, birthdayDate, address);
-
             boolean isUpdated = userService.updateUserInDatabase(newUser);
 
             if (isUpdated) {
@@ -84,7 +83,7 @@ public class DoEditAccountPage implements Command {
             }
 
         } catch (ServiceException e) {
-            response.sendRedirect("Controller?command=go_to_error_page&error=Server+error");
+            response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Server+error");
         }
     }
 }

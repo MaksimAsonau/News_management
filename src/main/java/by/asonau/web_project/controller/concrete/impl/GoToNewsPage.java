@@ -33,9 +33,8 @@ public class GoToNewsPage implements Command {
         try {
             news = newsService.getNewsFromDatabaseById(Integer.parseInt(newsId));
         } catch (Exception e) {
-            // Логирование ошибки (при необходимости)
             e.printStackTrace();
-            request.setAttribute("errorMessage", "Ошибка при загрузке новости. Попробуйте позже.");
+            response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Server+error");
         }
 
         if (news != null) {

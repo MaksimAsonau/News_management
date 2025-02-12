@@ -24,8 +24,7 @@ public class Logout implements Command {
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("errorMessage", "Произошла ошибка при выходе из профиля.");
-            request.getRequestDispatcher("WEB-INF/jsp/error.jsp").forward(request, response);
+            response.sendRedirect("Controller?command=go_to_error_page&errorMessage=Server+error");
         }
     }
 }
